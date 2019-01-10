@@ -19,4 +19,5 @@ html {
     display: block;
     border: 1px solid;
     margin: 1rem auto;
+    max-width: 100%;
 }
