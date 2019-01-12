@@ -1,30 +1,55 @@
-let canvas, context;
+let canvas, ctx, cw, ch, radius, cwm, chm, startAngle, endAngle, midAngle, lblRadius, lX, lY;
 
 document.addEventListener('DOMContentLoaded', (e)=>{
     canvas = document.getElementById('canvas');
-    context = canvas.getContext('2d');
+    ctx = canvas.getContext('2d');
 
-    canvas.width = 600;
-    canvas.height = 400;
+    cw = canvas.width;
+    ch = canvas.height;
+    cwm = cw / 2;
+    chm = ch / 2;
+    radius = 100;
+    startAngle = 0;
+    tmp = 85;
+    label = "Test";
     
-    context.strokeStyle = "black";
-    context.fillStyle = "gold";
-    context.beginPath();
-    context.moveTo(200, 200);
-    let radius = 100;
-    context.arc(300,200,radius, 0, Math.PI+1);
-    context.lineWidth = 1;
-    context.lineTo(300,200);
-    context.font = '1rem Calibri, Helvetica, Arial, sans-serif';
-    context.textAlign = 'start';  //same as left if text direction is ltr
-    //context.fillStyle = "black";
-    context.fillText(calcPerc(Math.PI+1), 100, 20);
-    context.stroke();
-    context.fill();
-    context.closePath();
+    ctx.font = '1rem Calibri, Helvetica, Arial, sans-serif';
+    ctx.lineWidth = 1;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.strokeStyle = "grey";
+    ctx.fillStyle = rndHEXClr();
+    ctx.beginPath();
+    endAngle = calcSlice(tmp); //(tmp / 100) * Math.PI * 2 + startAngle;
+    ctx.moveTo(cwm, chm);
+    ctx.arc(cwm,chm,radius, startAngle, endAngle);
+    ctx.lineTo(cwm,chm);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();
+    midAngle = startAngle + (endAngle - startAngle) / 2;
+    lblPosition(.55);
+    ctx.fillStyle = 'white';
+    ctx.fillText(tmp, lX, lY);
+    lblPosition(.85);
+    ctx.fillText(label, lX, lY);
+    ctx.closePath();
+
+    startAngle = endAngle;
 });
 
-function calcPerc(valToPerc) {
-    let retPerc = Math.round(valToPerc * 100 / (2*Math.PI));
-    return retPerc;
+function calcSlice(valPerc) {
+    return (valPerc * (Math.PI * 2) / 100) + startAngle;
+}
+
+function rndHEXClr () {
+    return "#" + Math.random().toString(16).slice(2,8);
+}
+
+function lblPosition (factor) {
+    lblRadius = radius * factor;
+    lX = cwm + (lblRadius) * Math.cos(midAngle);
+    lY = chm + (lblRadius) * Math.sin(midAngle);
 }
