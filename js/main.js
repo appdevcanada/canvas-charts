@@ -55,7 +55,7 @@ function getJSONData() {
     let URL = "students.json";
     let customOptions = {
         mode: "cors",
-        method: "POST"
+        method: "GET"
     };
 
     let request = new Request(URL, customOptions);
