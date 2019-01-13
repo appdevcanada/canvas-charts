@@ -1,0 +1,54 @@
+{
+    "studentslist": {
+        "studentdata": [
+            {
+                "id": "566",
+                "name": "Alex B.",
+                "perc": 15.2,
+                "colour": "#6e0580"
+            },
+            {
+                "id": "567",
+                "name": "Devon S.",
+                "perc": 14.8,
+                "colour": "#278cb0"
+            },
+            {
+                "id": "568",
+                "name": "Cole M.",
+                "perc": 14.5,
+                "colour": "#ca2de3"
+            },
+            {
+                "id": "569",
+                "name": "Cara G.",
+                "perc": 13.5,
+                "colour": "#0136f0"
+            },
+            {
+                "id": "570",
+                "name": "Bree W.",
+                "perc": 11.6,
+                "colour": "#784252"
+            },
+            {
+                "id": "571",
+                "name": "Krista P.",
+                "perc": 12.4,
+                "colour": "#5ac30b"
+            },
+            {
+                "id": "572",
+                "name": "Cassandra S.",
+                "perc": 9.7,
+                "colour": "#848b7a"
+            },
+            {
+                "id": "573",
+                "name": "Grace B.",
+                "perc": 8.3,
+                "colour": "#1fab95"
+            }
+        ]
+    }
+}

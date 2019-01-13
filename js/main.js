@@ -1,6 +1,7 @@
 let canvas, ctx, cw, ch, radius, cwm, chm, startAngle, endAngle, midAngle, lblRadius, lX, lY;
 
 document.addEventListener('DOMContentLoaded', (e)=>{
+    getJSONData();
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
 
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     chm = ch / 2;
     radius = 100;
     startAngle = 0;
-    tmp = 85;
+    tmp = 80.5;
     label = "Test";
     
     ctx.font = '1rem Calibri, Helvetica, Arial, sans-serif';
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     midAngle = startAngle + (endAngle - startAngle) / 2;
     lblPosition(.55);
     ctx.fillStyle = 'white';
-    ctx.fillText(tmp, lX, lY);
+    ctx.fillText(tmp + "%", lX, lY);
     lblPosition(.85);
     ctx.fillText(label, lX, lY);
     ctx.closePath();
@@ -44,12 +45,22 @@ function calcSlice(valPerc) {
     return (valPerc * (Math.PI * 2) / 100) + startAngle;
 }
 
-function rndHEXClr () {
-    return "#" + Math.random().toString(16).slice(2,8);
-}
-
 function lblPosition (factor) {
     lblRadius = radius * factor;
     lX = cwm + (lblRadius) * Math.cos(midAngle);
     lY = chm + (lblRadius) * Math.sin(midAngle);
+}
+
+function getJSONData() {
+    let file = "./students.json";
+    fetch(file)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+        })
+        .catch(function (error) {
+            alert(error);
+        })
 }
