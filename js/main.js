@@ -52,7 +52,7 @@ function lblPosition (factor) {
 }
 
 function getJSONData() {
-    let URL = "https://github.com/mora0199/canvas-charts/blob/master/students.json";
+    let URL = "students.json";
     let customOptions = {
         mode: "cors",
         method: "POST"
