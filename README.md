@@ -3,9 +3,9 @@
 A simple webpage that has two *Canvas* charts elements. These two elements display InfoGraphics that represent the contents of a **JSON** file created as a sample data repo.
 
 ## How it works
-When page is loaded, JS access a **JSON** file reading all data for both charts and executes sequentially record by record setting properties for each chart type and filling charts data inside a predefined *Canvas* area in HTML.
+When page is loaded, JS access a **JSON** file reading all data for both charts and executes sequentially record by record setting properties for each chart type and filling charts data inside a predefined *Canvas* area in **HTML**.
 
-The access to JSON file is done using command **FETCH**, like this:
+The access to **JSON** file is done using command **FETCH**, like this:
 ```javascript
 fetch(URL)
     .then(function (response) {
