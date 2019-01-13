@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     chm = ch / 2;
     radius = 100;
     startAngle = 0;
-    tmp = 80.5;
-    label = "Test";
+    tmp = data.studentslist.studentdata.perc;
+    label = data.studentslist.studentdata.name;
     
     ctx.font = "1rem Calibri, Helvetica, Arial, sans-serif";
     ctx.lineWidth = 1;
@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     ctx.textBaseline= "middle";
     ctx.strokeStyle = "grey";
     ctx.fillStyle = "black";
+
+    
     ctx.beginPath();
     endAngle = calcSlice(tmp); //(tmp / 100) * Math.PI * 2 + startAngle;
     ctx.moveTo(cwm, chm);
