@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', (e)=>{
     tmp = 80.5;
     label = "Test";
     
-    ctx.font = '1rem Calibri, Helvetica, Arial, sans-serif';
+    ctx.font = "1rem Calibri, Helvetica, Arial, sans-serif";
     ctx.lineWidth = 1;
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
+    ctx.textAlign= "center";
+    ctx.textBaseline= "middle";
     ctx.strokeStyle = "grey";
-    ctx.fillStyle = rndHEXClr();
+    ctx.fillStyle = "black";
     ctx.beginPath();
     endAngle = calcSlice(tmp); //(tmp / 100) * Math.PI * 2 + startAngle;
     ctx.moveTo(cwm, chm);
