@@ -1,5 +1,6 @@
-let canvas, ctx, cw, ch, radius, cwm, chm, startAngle, endAngle, midAngle, lblRadius, lX, lY;
-let lblName, lblPerc, hexColour;
+let canvas, ctxpie, cpw, cph, radius, cpwm, cphm, startAngle, endAngle, midAngle, lblRadius, lX, lY;
+let chtHeight, offsetX, barWidth, barHeight, spcBetweenPoints, cbXInit, chtArea;
+let lblName, lblPerc, hexColour, qtyItems;
 
 document.addEventListener('DOMContentLoaded', (e)=>{
     getJSONData();
@@ -13,20 +14,14 @@ function getJSONData() {
             return response.json();
         })
         .then(function (data) {
-            canvas = document.getElementById('canvas');
-            ctx = canvas.getContext('2d');
-            cw = canvas.width;
-            ch = canvas.height;
-            cwm = cw / 2;
-            chm = ch / 2;
-            radius = 100;
-            startAngle = 0;
+            qtyItems = data.studentslist.studentdata.length;
+            setChartsDefault();
             for (let item in data.studentslist.studentdata) {
                 lblPerc = data.studentslist.studentdata[item].perc;
                 lblName = data.studentslist.studentdata[item].name;
                 hexColour = data.studentslist.studentdata[item].colour;
-                console.log("passei " + lblPerc);
-                buildCharts();
+                buildPieChart();
+                buildBarChart();
             }
         })
         .catch(function (error) {
@@ -34,42 +29,105 @@ function getJSONData() {
         })
 }
 
+function setChartsDefault () {
+    canvaspie = document.getElementById('canvaspie');
+    canvasbar = document.getElementById('canvasbar');
+    ctxpie = canvaspie.getContext('2d');
+    ctxbar = canvasbar.getContext('2d');
+    cpw = canvaspie.width;
+    cbw = canvasbar.width;
+    cph = canvaspie.height;
+    cbh = canvasbar.height;
+    cpwm = cpw / 2;
+    cphm = cph / 2;
+
+    //clear both canvas areas
+    ctxpie.clearRect(0, 0, cpw, cph);
+    ctxbar.clearRect(0, 0, cbw, cbh);
+
+    // Pie Chart properties
+    radius = 100;
+    startAngle = 0;
+    ctxpie.font = ".8rem Calibri, Helvetica, Arial, sans-serif";
+    ctxpie.lineWidth = 1;
+    ctxpie.textAlign= "center";
+    ctxpie.textBaseline= "middle";
+    ctxpie.strokeStyle = "grey";
+
+    // Bar Chart properties
+    // the percentage of each value in JSON will be used
+    // to determine the height of the bars based on Canvas height.
+    ctxbar.font = ".8rem Calibri, Helvetica, Arial, sans-serif";
+    ctxbar.lineWidth = 1;
+    ctxbar.strokeStyle = "grey";
+    chtHeight = 400;    // bottom edge of the chart
+    offsetX = 40;	// space away from left edge of canvas to start drawing.
+    spcBetweenPoints = 20; // how far apart to make each X value.
+    cbXInit = offsetX + 20;	// left edge of first rectangle
+    chtArea = cbw - cbXInit - offsetX;
+    barWidth = chtArea / qtyItems - spcBetweenPoints;	// width of each bar in the chart
+    ctxbar.beginPath();
+    ctxbar.moveTo(offsetX, (cbh-chtHeight)/2);
+    ctxbar.lineTo(offsetX, chtHeight+(cbh-chtHeight)/2);
+    ctxbar.lineTo(cbw-offsetX, chtHeight+(cbh-chtHeight)/2);
+    ctxbar.stroke();  
+    ctxbar.closePath();
+}
+
 function calcSlice(valPerc) {
     return (valPerc * (Math.PI * 2) / 100) + startAngle;
 }
 
-function lblPosition (factor) {
+function lblPosition(factor) {
     lblRadius = radius * factor;
-    lX = cwm + (lblRadius) * Math.cos(midAngle);
-    lY = chm + (lblRadius) * Math.sin(midAngle);
+    lX = cpwm + (lblRadius) * Math.cos(midAngle);
+    lY = cphm + (lblRadius) * Math.sin(midAngle);
 }
 
-function buildCharts() {
-    ctx.font = ".8rem Calibri, Helvetica, Arial, sans-serif";
-    ctx.lineWidth = 1;
-    ctx.textAlign= "center";
-    ctx.textBaseline= "middle";
-    ctx.strokeStyle = "grey";
-    ctx.fillStyle = hexColour;
+function buildPieChart() {
+    ctxpie.fillStyle = hexColour;
+    ctxpie.beginPath();
+    endAngle = calcSlice(lblPerc);
+    ctxpie.moveTo(cpwm, cphm);
+    ctxpie.arc(cpwm,cphm,radius, startAngle, endAngle);
+    ctxpie.lineTo(cpwm,cphm);
+    ctxpie.fill();
+    ctxpie.stroke();
+    ctxpie.closePath();
 
-    ctx.beginPath();
-    endAngle = calcSlice(lblPerc); //(tmp / 100) * Math.PI * 2 + startAngle;
-    ctx.moveTo(cwm, chm);
-    ctx.arc(cwm,chm,radius, startAngle, endAngle);
-    ctx.lineTo(cwm,chm);
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
-
-    ctx.beginPath();
+    ctxpie.beginPath();
     midAngle = startAngle + (endAngle - startAngle) / 2;
     lblPosition(.75);
-    ctx.fillStyle = 'white';
-    ctx.fillText(lblPerc + "%", lX, lY);
+    ctxpie.fillStyle = 'white';
+    ctxpie.fillText(lblPerc + "%", lX, lY);
     lblPosition(1.3);
-    ctx.fillStyle = hexColour;
-    ctx.fillText(lblName, lX, lY);
-    ctx.closePath();
+    ctxpie.fillStyle = hexColour;
+    ctxpie.fillText(lblName, lX, lY);
+    ctxpie.closePath();
 
     startAngle = endAngle;
+}
+
+function buildBarChart() {
+    ctxbar.beginPath();
+    ctxbar.fillStyle = hexColour;
+    barHeight =  lblPerc * chtHeight / 100;
+    ctxbar.rect(cbXInit, (chtHeight+(cbh-chtHeight)/2), barWidth, -1 * barHeight);
+    // All the Perc labels for the bars are top
+    ctxbar.fillText(lblPerc + "%", cbXInit+4, (chtHeight+(cbh-chtHeight)/2) - barHeight - spcBetweenPoints/2);
+    ctxbar.fill();
+    ctxbar.stroke();
+    ctxbar.closePath();
+    // Set new 0,0 with translate and rotate canvas to show text/subtitle
+    ctxbar.beginPath();
+    ctxbar.save();
+    ctxbar.translate(cbXInit,(chtHeight+(cbh-chtHeight)) - spcBetweenPoints*4);
+    ctxbar.rotate(45 * (Math.PI / 180));
+    ctxbar.fillText(lblName, 0, 0);
+    ctxbar.restore();
+    ctxbar.fill();
+    ctxbar.stroke();
+    ctxbar.closePath();
+    // Save X position for next bar
+    cbXInit = cbXInit + barWidth + spcBetweenPoints;	    
 }
